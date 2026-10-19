@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { WeddingContent } from "@/lib/content/wedding";
 import { E, EImg, ERich } from "@/components/Editable";
 import { Rich } from "@/components/Rich";
+import { Carousel } from "@/components/Carousel";
 import { EnquiryForm } from "./EnquiryForm";
 
 const CARDS = [
@@ -97,16 +98,19 @@ export function WeddingHome({ c }: { c: WeddingContent }) {
               {c["testimonials.subtitle"]}
             </E>
           </div>
-          <div className="space-y-12" data-k="testimonials" data-k-kind="list">
-            {c.testimonials.map((t, i) => (
-              <figure key={i} className="grid items-center gap-8 md:grid-cols-[280px_1fr]">
-                {t.image ? <Image src={t.image} alt={`${t.author}'s ceremony`} width={560} height={560} sizes="280px" className="w-full rounded-lg object-cover" /> : <div />}
-                <blockquote>
-                  <Rich text={t.quote} className="text-xl font-semibold leading-relaxed" />
-                  <figcaption className="mt-4 text-mauve">{t.author}</figcaption>
-                </blockquote>
-              </figure>
-            ))}
+          <div data-k="testimonials" data-k-kind="list">
+            <Carousel
+              label="Testimonials"
+              slides={c.testimonials.map((t, i) => (
+                <figure key={i} className="grid items-center gap-8 md:grid-cols-[280px_1fr]">
+                  {t.image ? <Image src={t.image} alt={`${t.author}'s ceremony`} width={560} height={560} sizes="280px" className="aspect-square w-full rounded-lg object-contain" /> : <div />}
+                  <blockquote>
+                    <Rich text={t.quote} className="text-xl font-semibold leading-relaxed" />
+                    <figcaption className="mt-4 text-mauve">{t.author}</figcaption>
+                  </blockquote>
+                </figure>
+              ))}
+            />
           </div>
         </div>
       </section>

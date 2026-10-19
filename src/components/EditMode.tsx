@@ -65,7 +65,8 @@ export function EditMode({ site }: { site: Site }) {
     // clicks: links inside editable bits mustn't navigate; long text, pictures and lists open their editors
     const onClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.closest("[data-edit-ui]")) return;
+      // the edit bar, and a list's own controls (carousel arrows) keep working
+      if (target.closest("[data-edit-ui]") || target.closest('[data-k-kind="list"] button')) return;
       const el = target.closest<HTMLElement>("[data-k]");
       if (!el) return;
       e.preventDefault();

@@ -52,6 +52,18 @@ export const weddingDefaults = {
       author: "Elizabeth Dickens",
       image: "/img/wedding/testimonial-elizabeth.jpg",
     },
+    {
+      quote:
+        "Will and I have been together for years and just never got round to a wedding. Minnie offered to plan a whole wedding ceremony for us as a project after receiving her wedding celebrant certification. We had three online meetings and shared our story with her as well as completing a questionnaire on our relationship specificities. She created something super unique. It encapsulated everything we wanted. Once the venue is booked, we will have a perfect day celebrating with friends and family.",
+      author: "Amy Whittaker",
+      image: "/img/wedding/testimonial-amy.jpg",
+    },
+    {
+      quote:
+        "Adam and I have been married since 2009. We had a wonderful wedding in Sligo, Ireland where my family are from. Now aged 40, we both wanted a ceremony that included our daughter and was in London where we have lived our whole lives. I worked with Minnie a few years ago and heard that she was now a celebrant. Her script writing, ceremony creation and delivery were top notch. Knows her stuff! It really was more than we could have hoped for. Can't recommend highly enough",
+      author: "Clare White",
+      image: "/img/wedding/testimonial-clare.jpg",
+    },
   ] as Testimonial[],
 
   "faq.title": "Frequently Asked Questions",
