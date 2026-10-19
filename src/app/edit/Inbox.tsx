@@ -38,17 +38,28 @@ const SITE_NAME = { wedding: "Wedding", rcc: "RCC" };
 /** Enquiries and booking requests from both sites, newest first, with a status and private notes. */
 export function Inbox({ items }: { items: Submission[] }) {
   const [filter, setFilter] = useState<"open" | "downloads" | "all">("open");
-  const shown = items.filter((s) => (filter === "all" ? true : filter === "downloads" ? s.kind === "download" : !["done", "archived"].includes(s.status)));
+  const [site, setSite] = useState<"both" | "wedding" | "rcc">("both");
+  const shown = items
+    .filter((s) => site === "both" || s.site === site)
+    .filter((s) => (filter === "all" ? true : filter === "downloads" ? s.kind === "download" : !["done", "archived"].includes(s.status)));
+  const chip = (on: boolean) => `rounded-full px-3 py-1 ${on ? "bg-neutral-900 text-white" : "bg-white text-neutral-600 ring-1 ring-neutral-200"}`;
   if (!items.length) return <p className="rounded-lg border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">Nothing yet. New enquiries and booking requests will appear here (and in your email).</p>;
   return (
     <div className="space-y-3">
-      <div className="flex gap-2 text-sm">
+      <div className="flex flex-wrap gap-2 text-sm">
         {(["open", "downloads", "all"] as const).map((f) => (
-          <button key={f} onClick={() => setFilter(f)} className={`rounded-full px-3 py-1 ${filter === f ? "bg-neutral-900 text-white" : "bg-white text-neutral-600 ring-1 ring-neutral-200"}`}>
+          <button key={f} onClick={() => setFilter(f)} className={chip(filter === f)}>
             {f === "open" ? "To do" : f === "downloads" ? `Free downloads (${items.filter((s) => s.kind === "download").length})` : "All"}
           </button>
         ))}
+        <span className="mx-1 self-center text-neutral-300">|</span>
+        {(["both", "wedding", "rcc"] as const).map((x) => (
+          <button key={x} onClick={() => setSite(x)} className={chip(site === x)}>
+            {x === "both" ? "Both sites" : SITE_NAME[x]}
+          </button>
+        ))}
       </div>
+      {!shown.length && <p className="text-sm text-neutral-500">Nothing here.</p>}
       {shown.map((s) => (
         <Item key={s.id} s={s} />
       ))}
@@ -70,7 +81,7 @@ function Item({ s }: { s: Submission }) {
     <details className="rounded-lg border border-neutral-200 bg-white" open={status === "new"}>
       <summary className="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3">
         <span className={`rounded px-1.5 py-0.5 text-xs ${s.site === "wedding" ? "bg-pink-100 text-pink-900" : "bg-blue-100 text-blue-900"}`}>{SITE_NAME[s.site]}</span>
-        {s.kind === "download" && <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-xs text-emerald-900">Free download</span>}
+        {s.kind === "download" && <span className="text-xs text-neutral-500">Free download</span>}
         <span className="font-medium">{s.site === "rcc" && s.data.school ? `${s.data.school} · ${s.name}` : s.name}</span>
         <span className="text-sm text-neutral-500">{new Date(s.created_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</span>
         <span className={`ml-auto rounded-full px-2 py-0.5 text-xs ${status === "new" ? "bg-amber-100 text-amber-900" : "bg-neutral-100 text-neutral-600"}`}>{status}</span>
