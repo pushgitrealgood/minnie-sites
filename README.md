@@ -24,6 +24,7 @@ Open http://wedding.localhost:3000 and http://rcc.localhost:3000 (`*.localhost` 
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
 - `RESEND_API_KEY_WEDDING`, `RESEND_API_KEY_RCC` – one Resend account per domain (free plan = one domain each); `RESEND_API_KEY` is used for both if set instead. Without a key, form submissions are saved but not emailed
 - `MAIL_COPY_TO` – optional; comma-separated addresses that also get every enquiry/booking email (testing)
+- `NEXT_PUBLIC_GA_ID_WEDDING`, `NEXT_PUBLIC_GA_ID_RCC` – optional GA4 measurement IDs (G-…); a cookie banner shows only when set, and GA loads only after Accept
 - `SITE_HOSTS` – optional extra hostnames for staging, e.g. `wedding=wedding-minnie.netlify.app,rcc=rcc-minnie.netlify.app`
 
 Database changes are in `supabase/migrations` (`npx supabase db push --linked`).

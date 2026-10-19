@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { TrackLead } from "@/components/Analytics";
 import { submitForm, type FormState } from "@/app/actions";
 import { Field, SpamTraps } from "@/components/FormBits";
 
@@ -13,6 +14,7 @@ export function EnquiryForm({ thanks }: { thanks: string }) {
     return (
       <p role="status" className="mt-10 rounded-lg bg-white p-6 text-center text-xl text-wine">
         {thanks}
+        <TrackLead form="wedding-enquiry" />
       </p>
     );
   const v = state.fields ?? {};

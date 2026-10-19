@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { TrackLead } from "@/components/Analytics";
 import { submitForm, type FormState } from "@/app/actions";
 import { Field, SpamTraps } from "@/components/FormBits";
 
@@ -12,6 +13,7 @@ export function BookingForm({ thanks }: { thanks: string }) {
     return (
       <p role="status" className="rounded-lg border border-slate-200 bg-mist p-6 text-center text-lg">
         {thanks}
+        <TrackLead form="rcc-booking" />
       </p>
     );
   const v = state.fields ?? {};
