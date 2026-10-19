@@ -9,9 +9,21 @@ import { isSite, siteForHost } from "@/lib/sites";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const site = siteForHost(request.headers.get("host"));
-  if (!site) return NextResponse.next();
-  // on a real domain, /rcc/... or /wedding/... would show the other site: send it to its own domain path
   const first = pathname.split("/")[1] ?? "";
+  if (!site) {
+    // preview address: remember the site being looked at, so its menu links (/faq, /book…) stay on that site
+    if (isSite(first)) {
+      const res = NextResponse.next();
+      res.cookies.set("preview-site", first, { path: "/" });
+      return res;
+    }
+    const remembered = request.cookies.get("preview-site")?.value ?? "";
+    if (!isSite(remembered)) return NextResponse.next();
+    const url = request.nextUrl.clone();
+    url.pathname = `/${remembered}${pathname === "/" ? "" : pathname}`;
+    return NextResponse.rewrite(url);
+  }
+  // on a real domain, /rcc/... or /wedding/... would show the other site: send it to its own domain path
   if (isSite(first)) return NextResponse.redirect(new URL(pathname.slice(first.length + 1) || "/", request.url), 308);
   const url = request.nextUrl.clone();
   url.pathname = `/${site}${pathname === "/" ? "" : pathname}`;
