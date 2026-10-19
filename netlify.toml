@@ -5,6 +5,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # public by design (they ship to the browser; the database is protected by row-level security)
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY"
 
 # make sure the Next.js runtime runs (without it Netlify serves the raw .next folder and every page 404s)
 [[plugins]]
