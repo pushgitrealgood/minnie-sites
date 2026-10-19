@@ -6,7 +6,7 @@ import { SITE_INFO, siteForHost } from "@/lib/sites";
 import { signOut } from "./actions";
 import { newPost } from "./posts/actions";
 import { postDate } from "@/lib/post-date";
-import { SignIn } from "./SignIn";
+import { SetPassword, SignIn } from "./SignIn";
 import { Inbox, type Submission } from "./Inbox";
 
 export const metadata: Metadata = { title: "Edit your websites", robots: { index: false, follow: false } };
@@ -29,7 +29,7 @@ async function EditHome({ searchParams }: { searchParams: PageProps<"/edit">["se
     return (
       <div className="mx-auto max-w-sm px-4 pt-[15vh]">
         <h1 className="mb-1 text-xl font-semibold">Edit your websites</h1>
-        <p className="mb-5 text-sm text-neutral-600">Enter your email and we’ll send you a link to sign in.</p>
+        <p className="mb-5 text-sm text-neutral-600">Sign in to change your websites and see enquiries.</p>
         {error === "link" && <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700">That link has expired. Please ask for a new one.</p>}
         <SignIn />
       </div>
@@ -50,6 +50,8 @@ async function EditHome({ searchParams }: { searchParams: PageProps<"/edit">["se
           {editor} · <button className="underline">Sign out</button>
         </form>
       </div>
+
+      <SetPassword />
 
       <section className="grid gap-4 sm:grid-cols-2">
         {(["wedding", "rcc"] as const).map((s) => {

@@ -27,6 +27,30 @@ export async function sendLink(_prev: { sent?: boolean; error?: string }, formDa
   return { sent: true };
 }
 
+/** Sign in with email and password; anyone may try, but only editors can then do anything. */
+export async function signInPassword(_prev: { error?: string }, formData: FormData) {
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  const next = String(formData.get("next") ?? "/edit");
+  if (!email || !password) return { error: "Please enter your email and password." };
+  const supabase = await serverClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { error: "That email and password don't match. First time, or forgotten it? Use “Email me a sign-in link” below, then set a password." };
+  redirect(next.startsWith("/") && !next.startsWith("//") ? next : "/edit");
+}
+
+/** Set or change the signed-in editor's password (after signing in by email link, for instance). */
+export async function setPassword(_prev: { ok?: boolean; error?: string }, formData: FormData) {
+  if (!(await currentEditor())) return { error: "Please sign in again." };
+  const password = String(formData.get("password") ?? "");
+  if (password.length < 10) return { error: "Please use at least 10 characters." };
+  if (password !== String(formData.get("confirm") ?? "")) return { error: "The two passwords don't match." };
+  const supabase = await serverClient();
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { error: error.message.includes("different") ? "That's already your password." : "Couldn't save the password. Please try again." };
+  return { ok: true };
+}
+
 export async function signOut() {
   const supabase = await serverClient();
   await supabase.auth.signOut();
