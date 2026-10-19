@@ -5,3 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# make sure the Next.js runtime runs (without it Netlify serves the raw .next folder and every page 404s)
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
