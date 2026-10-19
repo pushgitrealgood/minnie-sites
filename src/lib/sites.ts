@@ -16,6 +16,12 @@ export const SITE_INFO: Record<Site, { name: string; url: string; hosts: string[
   },
 };
 
+/** Old Bubble addresses → their new page ("" = home), redirected permanently so old links and Google results still work. */
+export const LEGACY: Record<Site, Record<string, string>> = {
+  wedding: { submit_client_details: "enquire", client_portal: "", index: "", login: "", reset_pw: "" },
+  rcc: { index: "", login: "", reset_pw: "" },
+};
+
 /** Public pages per site (path without leading slash; "" is the home page). */
 export const PAGES: Record<Site, string[]> = {
   wedding: ["", "faq", "enquire"],
