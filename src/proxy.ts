@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isSite, siteForHost } from "@/lib/sites";
+import { isSite, SITE_INFO, siteForHost } from "@/lib/sites";
 
 /**
  * One app, two domains: thoroughlymodernminnie.co.uk/faq is served from /wedding/faq, schoolresilienceworkshop.com/book
@@ -23,6 +23,9 @@ export function proxy(request: NextRequest) {
     url.pathname = `/${remembered}${pathname === "/" ? "" : pathname}`;
     return NextResponse.rewrite(url);
   }
+  // one address per page for Google: www.… → the bare domain
+  const host = (request.headers.get("host") ?? "").toLowerCase();
+  if (host.startsWith("www.")) return NextResponse.redirect(new URL(pathname + request.nextUrl.search, SITE_INFO[site].url), 301);
   // on a real domain, /rcc/... or /wedding/... would show the other site: send it to its own domain path
   if (isSite(first)) return NextResponse.redirect(new URL(pathname.slice(first.length + 1) || "/", request.url), 308);
   const url = request.nextUrl.clone();
