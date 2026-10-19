@@ -72,6 +72,11 @@ export const weddingDefaults = {
   "chat.text": "Whether you’re ready to book or just exploring options, I’d love to hear from you.",
   "chat.cta": "Enquire today",
 
+  "blog.title": "Journal",
+  "blog.intro": "Real ceremonies, ideas and advice for planning yours.",
+  "blog.cta": "Planning a ceremony of your own?",
+  "blog.ctaButton": "Let’s chat",
+
   "faq.title": "Frequently Asked Questions",
   "faq.intro": "Everything couples usually ask before booking. Can’t see your question? Just get in touch.",
   "faq.cta": "Ask me anything",

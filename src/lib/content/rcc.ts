@@ -13,6 +13,9 @@ const whyItMatters = {
     "Childhood isn’t always carefree. From school pressures to social challenges, kids today face real stress. Our workshops provide tools to:\n\n- Cope with anxiety and uncertainty\n- Learn from setbacks and “fail well”\n- Shift from “I can’t” to “How can I?”\n- Understand the energy they project into the world\n\nResilience, confidence, and critical thinking are life skills — and they can be taught.",
 };
 
+/** A school's story: what they asked for, what we did and what changed. Edited as a list in edit mode. */
+export type CaseStudy = { school: string; title: string; summary: string; outcome: string; quote: string; image: string };
+
 export const rccDefaults = {
   "seo.title": "School Resilience Workshops for KS2 & KS3 | RCC Workshops",
   "seo.description":
@@ -151,6 +154,25 @@ export const rccDefaults = {
   "about.image": "/img/rcc/about.png",
   "about.text":
     "With a unique blend of experience in education, drama, and wellness, I bring a passionate, holistic approach to personal development for young people.\n\n- 10 years as an educator and drama practitioner, working across KS1–KS4\n- 20 years studying and practising wellness and mental health\n- 30 years immersed in drama and live theatre\n- 40 years of navigating life, relationships, and self-growth\n\nMy journey through education and theatre, paired with a deep understanding of energy, mindfulness, and emotional wellbeing, has led me to this work.\n\nThe world is evolving, and the importance of teaching mental wellness is finally being recognised within schools. Practices like meditation, breathwork, and yoga are becoming common in KS2/KS3 environments—with powerful results. But there’s more to teach: It’s time children learn about energy—the positive and the negative—and the powerful role their own mindset and presence play in shaping their world.",
+
+  "resource.eyebrow": "Free for teachers",
+  "resource.title": "5 resilience activities for your classroom",
+  "resource.text": "Quick, ready-to-run activities from our workshops that help KS2 and KS3 pupils bounce back from setbacks, try new things and think for themselves. Leave your details and we'll send the PDF straight away.",
+  "resource.button": "Send me the activities",
+  "resource.fileLabel": "5 resilience activities (PDF)",
+  "resource.file": "",
+  "resource.thanks": "Thank you! Your download is ready, and we've emailed you a copy of the link.",
+
+  "caseStudies.seoTitle": "School Case Studies | RCC Workshops",
+  "caseStudies.title": "Case studies",
+  "caseStudies.intro": "How schools have used RCC workshops, and what changed for their pupils.",
+  "caseStudies.nav": "Case studies",
+  caseStudies: [] as CaseStudy[],
+
+  "blog.title": "Blog",
+  "blog.intro": "Ideas, activities and research on building resilience, confidence and critical thinking in KS2 & KS3.",
+  "blog.cta": "Bring a workshop to your school",
+  "blog.ctaButton": "Book a workshop",
 
   "book.seoTitle": "Book a Workshop | RCC Workshops",
   "book.title": "Make a Booking",

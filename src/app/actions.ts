@@ -80,3 +80,36 @@ export async function submitForm(site: Site, _prev: FormState, formData: FormDat
   );
   return { ok: true };
 }
+
+export type DownloadState = { ok: boolean; error?: string; file?: string; fields?: Record<string, string> };
+
+/**
+ * RCC free download: a teacher leaves their name and email, gets the PDF straight away (and by email), and the sign-up
+ * is saved to the inbox so Minnie can follow up.
+ */
+export async function submitDownload(_prev: DownloadState, formData: FormData): Promise<DownloadState> {
+  const c = await getContent("rcc");
+  const file = c["resource.file"];
+  if (!file) return { ok: false, error: "The download isn't available just now." };
+  const values = {
+    name: String(formData.get("name") ?? "").trim().slice(0, 200),
+    email: String(formData.get("email") ?? "").trim().slice(0, 200),
+    school: String(formData.get("school") ?? "").trim().slice(0, 200),
+  };
+  const startedAt = Number(formData.get("t") ?? 0);
+  if (String(formData.get("website") ?? "") || (startedAt && Date.now() - startedAt < 3000)) return { ok: true, file };
+  if (!values.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(values.email)) return { ok: false, error: "Please give your name and a valid email address.", fields: values };
+
+  const { error } = await adminClient()
+    .from("submissions")
+    .insert({ site: "rcc", kind: "download", name: values.name, email: values.email.toLowerCase(), data: { ...values, resource: c["resource.title"] }, status: "done" });
+  if (error) return { ok: false, error: "Sorry, something went wrong. Please try again.", fields: values };
+
+  await sendMail("rcc", {
+    to: values.email,
+    replyTo: c["contact.email"],
+    subject: c["resource.title"],
+    html: `<p>Hi ${escapeHtml(values.name)},</p><p>Thanks for your interest. Here's your download: <a href="${escapeHtml(file)}">${escapeHtml(c["resource.fileLabel"])}</a></p><p>If you'd like to talk about a workshop for your school, just reply to this email.</p><p>RCC Workshops</p>`,
+  }).catch(() => false);
+  return { ok: true, file };
+}

@@ -6,7 +6,7 @@ import { updateSubmission } from "./actions";
 export type Submission = {
   id: string;
   site: "wedding" | "rcc";
-  kind: "enquiry" | "booking";
+  kind: "enquiry" | "booking" | "download";
   name: string;
   email: string;
   data: Record<string, string>;
@@ -30,6 +30,7 @@ const LABELS: Record<string, string> = {
   size: "Group size",
   goals: "Learning goals",
   interests: "Areas of interest",
+  resource: "Downloaded",
 };
 const STATUSES = ["new", "replied", "booked", "done", "archived"];
 const SITE_NAME = { wedding: "Wedding", rcc: "RCC" };
@@ -69,6 +70,7 @@ function Item({ s }: { s: Submission }) {
     <details className="rounded-lg border border-neutral-200 bg-white" open={status === "new"}>
       <summary className="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3">
         <span className={`rounded px-1.5 py-0.5 text-xs ${s.site === "wedding" ? "bg-pink-100 text-pink-900" : "bg-blue-100 text-blue-900"}`}>{SITE_NAME[s.site]}</span>
+        {s.kind === "download" && <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-xs text-emerald-900">Free download</span>}
         <span className="font-medium">{s.site === "rcc" && s.data.school ? `${s.data.school} · ${s.name}` : s.name}</span>
         <span className="text-sm text-neutral-500">{new Date(s.created_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</span>
         <span className={`ml-auto rounded-full px-2 py-0.5 text-xs ${status === "new" ? "bg-amber-100 text-amber-900" : "bg-neutral-100 text-neutral-600"}`}>{status}</span>

@@ -20,6 +20,14 @@ export const LIST_FIELDS: Record<string, Field[]> = {
     { name: "q", label: "Question" },
     { name: "a", label: "Answer", long: true },
   ],
+  caseStudies: [
+    { name: "school", label: "School (and town)" },
+    { name: "title", label: "Headline, e.g. “Year 6 transition: calmer, more confident pupils”" },
+    { name: "summary", label: "What the school wanted, and what we did", long: true },
+    { name: "outcome", label: "What changed", long: true },
+    { name: "quote", label: "Quote from a teacher (optional)", long: true },
+    { name: "image", label: "Photo (optional)", image: true },
+  ],
   activities: [
     { name: "title", label: "Activity" },
     { name: "how", label: "How it works", long: true },

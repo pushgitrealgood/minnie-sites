@@ -126,6 +126,19 @@ export function EditMode({ site }: { site: Site }) {
     setStatus("");
   }
 
+  /** A file for a link (e.g. the free PDF): uploaded, then its address goes in the link box. */
+  async function uploadLinkFile(file: File) {
+    if (file.size > 20 * 1024 * 1024) return setStatus("That file is over 20 MB. Please use a smaller one.");
+    setStatus("uploading");
+    const supabase = browserClient();
+    const path = uploadPath(site, "file", file.name);
+    const { error } = await supabase.storage.from("media").upload(path, file, { contentType: file.type || "application/octet-stream" });
+    if (error) return setStatus("Couldn't upload that file. Please try again.");
+    const input = document.getElementById("link-url") as HTMLInputElement | null;
+    if (input) input.value = supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
+    setStatus("File uploaded. Press Done, then Save.");
+  }
+
   async function save() {
     setStatus("saving");
     const r = await saveContent(site, changes);
@@ -163,7 +176,7 @@ export function EditMode({ site }: { site: Site }) {
 
       {box && (
         <Modal title="Edit text" onClose={() => setBox(null)}>
-          <p className="mb-2 text-neutral-500">Leave a blank line between paragraphs. Start a line with “- ” for a bullet point, “## ” for a small heading. Wrap words in **double stars** for bold.</p>
+          <p className="mb-2 text-neutral-500">Leave a blank line between paragraphs. Start a line with “- ” for a bullet point, “1. ” for a numbered list, “## ” for a small heading. A link: [words](address). Wrap words in **double stars** for bold.</p>
           <textarea autoFocus defaultValue={box.value} id="edit-box" rows={16} className="w-full rounded border border-neutral-300 p-2 font-[Arial,sans-serif] text-[15px] leading-relaxed" />
           <div className="mt-3 flex justify-end gap-2">
             <button onClick={() => setBox(null)} className="rounded px-3 py-1.5 hover:bg-neutral-100">
@@ -191,6 +204,10 @@ export function EditMode({ site }: { site: Site }) {
           <label className="mt-3 block">
             <span className="text-neutral-600">Web address it goes to</span>
             <input id="link-url" defaultValue={linkBox.url} type="url" className="mt-1 w-full rounded border border-neutral-300 px-2 py-1.5" />
+          </label>
+          <label className="mt-2 inline-block rounded border border-neutral-300 px-3 py-1.5 text-sm hover:bg-neutral-50">
+            …or upload a file (PDF or picture)
+            <input type="file" accept="application/pdf,image/*" hidden onChange={(e) => e.target.files?.[0] && uploadLinkFile(e.target.files[0])} />
           </label>
           <div className="mt-3 flex justify-end gap-2">
             <button onClick={() => setLinkBox(null)} className="rounded px-3 py-1.5 hover:bg-neutral-100">

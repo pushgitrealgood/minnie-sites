@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { RccContent } from "@/lib/content/rcc";
-import { E, EImg, ERich } from "@/components/Editable";
+import { E, EImg, ELink, ERich } from "@/components/Editable";
+import { FreeResourceForm } from "./FreeResource";
 import { Rich } from "@/components/Rich";
 import { BookingForm } from "./BookingForm";
 
@@ -45,6 +46,34 @@ function Cta({ c }: { c: RccContent }) {
         <Link href="/workshops" className="inline-block rounded border border-white/60 px-6 py-2.5 font-semibold hover:bg-white hover:text-navy">
           <E k="cta.button2">{c["cta.button2"]}</E>
         </Link>
+      </div>
+    </section>
+  );
+}
+
+/** Free PDF for teachers in exchange for their email. Hidden from visitors until a PDF has been added (edit mode shows it). */
+function FreeResource({ c }: { c: RccContent }) {
+  return (
+    <section id="free-resource" className={`scroll-mt-20 bg-navy px-4 py-16 text-white ${c["resource.file"] ? "" : "edit-only"}`}>
+      <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2">
+        <div>
+          <E k="resource.eyebrow" as="p" className={EYEBROW}>
+            {c["resource.eyebrow"]}
+          </E>
+          <E k="resource.title" as="h2" className="mt-2 block font-display text-3xl font-bold sm:text-4xl">
+            {c["resource.title"]}
+          </E>
+          <ERich k="resource.text" text={c["resource.text"]} className="mt-4 text-lg text-white/85" />
+          <p className="edit-only mt-6 rounded bg-white/10 p-3 text-sm">
+            {c["resource.file"] ? "The PDF people get: " : "Add the PDF (click to upload it) and this section appears on the site: "}
+            <ELink k="resource.fileLabel" urlKey="resource.file" href={c["resource.file"] || "#"} className="underline">
+              {c["resource.fileLabel"]}
+            </ELink>
+            <br />
+            <E k="resource.thanks">{c["resource.thanks"]}</E>
+          </p>
+        </div>
+        <FreeResourceForm button={c["resource.button"]} thanks={c["resource.thanks"]} fileLabel={c["resource.fileLabel"]} />
       </div>
     </section>
   );
@@ -185,6 +214,7 @@ export function RccHome({ c }: { c: RccContent }) {
         </div>
       </section>
 
+      <FreeResource c={c} />
       <Testimonials c={c} />
       <Cta c={c} />
     </>
@@ -233,6 +263,7 @@ export function RccWorkshops({ c }: { c: RccContent }) {
         </E>
         <ERich k="workshops.more" text={c["workshops.more"]} className="mt-3 text-base" />
       </article>
+      <FreeResource c={c} />
       <Cta c={c} />
     </>
   );
@@ -307,6 +338,37 @@ export function RccLegal({ c }: { c: RccContent }) {
         <ERich k="legal.text" text={c["legal.text"]} />
         <Rich text={`Contact: ${c["contact.email"]}`} className="mt-8" />
       </article>
+    </>
+  );
+}
+
+export function RccCaseStudies({ c }: { c: RccContent }) {
+  return (
+    <>
+      <PageHead c={c} k="caseStudies.title" lead="caseStudies.intro" />
+      <section className="mx-auto max-w-5xl px-4 py-14">
+        <div className="space-y-10" data-k="caseStudies" data-k-kind="list">
+          {c.caseStudies.map((s, i) => (
+            <article key={i} className="grid gap-8 rounded-lg border border-slate-200 p-6 md:grid-cols-[280px_1fr]">
+              {s.image ? <Image src={s.image} alt={`Workshop at ${s.school}`} width={560} height={420} sizes="(max-width: 768px) 100vw, 280px" className="aspect-[4/3] w-full rounded object-cover" /> : null}
+              <div className={s.image ? "" : "md:col-span-2"}>
+                <p className={EYEBROW}>{s.school}</p>
+                <h2 className="mt-1 font-display text-2xl font-bold">{s.title}</h2>
+                {s.summary && <Rich text={s.summary} className="mt-3 text-slate" />}
+                {s.outcome && (
+                  <>
+                    <h3 className="mt-5 font-semibold text-navy">What changed</h3>
+                    <Rich text={s.outcome} className="mt-1 text-slate" />
+                  </>
+                )}
+                {s.quote && <blockquote className="mt-5 border-l-4 border-coral pl-4 text-lg italic">“{s.quote}”</blockquote>}
+              </div>
+            </article>
+          ))}
+          {!c.caseStudies.length && <p className="text-center text-slate">Case studies coming soon.</p>}
+        </div>
+      </section>
+      <Cta c={c} />
     </>
   );
 }

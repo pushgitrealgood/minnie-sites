@@ -66,15 +66,15 @@ export function Analytics({ site }: { site: Site }) {
   if (!id || consent !== "") return null;
   const look =
     site === "wedding"
-      ? { box: "bg-white text-ink font-serif text-lg", yes: "bg-rose text-white hover:bg-wine", no: "text-mauve" }
-      : { box: "bg-white text-navy font-sans", yes: "bg-coral text-white hover:bg-royal", no: "text-slate" };
+      ? { box: "bg-white text-ink font-serif text-[15px]", yes: "bg-rose text-white hover:bg-wine", no: "text-mauve" }
+      : { box: "bg-white text-navy font-sans text-[13px]", yes: "bg-coral text-white hover:bg-royal", no: "text-slate" };
   return (
-    <div role="region" aria-label="Cookies" className={`fixed inset-x-3 bottom-3 z-40 mx-auto flex max-w-xl flex-wrap items-center gap-3 rounded-lg p-4 shadow-[0_4px_24px_rgb(0_0_0/0.15)] ${look.box}`}>
-      <p className="min-w-[14rem] flex-1">We use cookies to see how people find and use this site. Is that OK?</p>
-      <button type="button" onClick={() => setConsent("no")} className={`rounded px-3 py-1.5 underline ${look.no}`}>
+    <div role="region" aria-label="Cookies" className={`fixed inset-x-3 bottom-3 z-40 mx-auto flex w-fit max-w-2xl flex-wrap items-center gap-x-3 gap-y-2 rounded-lg px-4 py-2.5 shadow-[0_4px_24px_rgb(0_0_0/0.15)] sm:flex-nowrap ${look.box}`}>
+      <p className="flex-1 sm:whitespace-nowrap">We use cookies to see how people find and use this site.</p>
+      <button type="button" onClick={() => setConsent("no")} className={`shrink-0 rounded px-2 py-1 underline ${look.no}`}>
         No thanks
       </button>
-      <button type="button" onClick={() => setConsent("yes")} className={`rounded px-4 py-1.5 font-semibold ${look.yes}`}>
+      <button type="button" onClick={() => setConsent("yes")} className={`shrink-0 rounded px-3.5 py-1 font-semibold ${look.yes}`}>
         Accept
       </button>
     </div>

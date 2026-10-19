@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { currentEditor, serverClient } from "@/lib/supabase/server";
 import { SITE_INFO, siteForHost } from "@/lib/sites";
 import { signOut } from "./actions";
+import { newPost } from "./posts/actions";
+import { postDate } from "@/lib/post-date";
 import { SignIn } from "./SignIn";
 import { Inbox, type Submission } from "./Inbox";
 
@@ -37,6 +39,8 @@ async function EditHome({ searchParams }: { searchParams: PageProps<"/edit">["se
   const supabase = await serverClient();
   const { data } = await supabase.from("submissions").select("id, site, kind, name, email, data, status, notes, created_at").order("created_at", { ascending: false }).limit(200);
   const subs = (data ?? []) as Submission[];
+  const { data: postRows } = await supabase.from("posts").select("id, site, title, slug, published_at, updated_at").order("updated_at", { ascending: false });
+  const posts = (postRows ?? []) as { id: string; site: "wedding" | "rcc"; title: string; slug: string; published_at: string | null; updated_at: string }[];
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-10">
@@ -62,6 +66,35 @@ async function EditHome({ searchParams }: { searchParams: PageProps<"/edit">["se
             </a>
           );
         })}
+      </section>
+
+      <section>
+        <h2 className="mb-3 font-semibold">Blog posts</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {(["wedding", "rcc"] as const).map((s) => (
+            <div key={s} className="rounded-lg border border-neutral-200 bg-white p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <h3 className="font-semibold">{SITE_INFO[s].name}</h3>
+                <form action={newPost.bind(null, s)} className="ml-auto">
+                  <button className="rounded bg-blue-600 px-3 py-1 text-sm font-semibold text-white">New post</button>
+                </form>
+              </div>
+              <ul className="divide-y divide-neutral-100 text-sm">
+                {posts
+                  .filter((p) => p.site === s)
+                  .map((p) => (
+                    <li key={p.id}>
+                      <a href={`/edit/posts/${p.id}`} className="flex items-baseline gap-2 py-2 hover:underline">
+                        <span className="min-w-0 flex-1 truncate">{p.title || "Untitled"}</span>
+                        <span className={`shrink-0 rounded px-1.5 text-xs ${p.published_at ? "bg-green-50 text-green-800" : "bg-amber-50 text-amber-800"}`}>{p.published_at ? postDate(p.published_at) : "Draft"}</span>
+                      </a>
+                    </li>
+                  ))}
+                {!posts.some((p) => p.site === s) && <li className="py-2 text-neutral-500">No posts yet.</li>}
+              </ul>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section>

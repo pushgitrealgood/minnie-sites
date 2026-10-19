@@ -11,7 +11,9 @@ const NAV = [
   { href: "/about-us", label: "About" },
 ];
 
-export function RccHeader() {
+export function RccHeader({ blogLabel, caseStudiesLabel }: { blogLabel?: string; caseStudiesLabel?: string }) {
+  // case studies and the blog join the menu once there's something in them
+  const nav = [...NAV, ...(caseStudiesLabel ? [{ href: "/case-studies", label: caseStudiesLabel }] : []), ...(blogLabel ? [{ href: "/blog", label: blogLabel }] : [])];
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-5 px-4 py-2">
@@ -19,7 +21,7 @@ export function RccHeader() {
           <Image src="/img/rcc/RCC-logo.png" alt="RCC Workshops: Resilience, Confidence, Critical thinking" width={60} height={53} className="h-12 w-auto" priority />
         </Link>
         <nav className="hidden flex-1 gap-6 text-[15px] text-slate lg:flex">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <Link key={n.href} href={n.href} className="hover:text-navy">
               {n.label}
             </Link>
@@ -31,7 +33,7 @@ export function RccHeader() {
         <details className="relative ml-auto lg:hidden">
           <summary className="cursor-pointer list-none rounded border border-slate-300 px-4 py-1.5">Menu</summary>
           <nav className="absolute right-0 mt-2 flex w-56 flex-col rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
-            {[...NAV, { href: "/book", label: "Book a workshop" }].map((n) => (
+            {[...nav, { href: "/book", label: "Book a workshop" }].map((n) => (
               <Link key={n.href} href={n.href} className="rounded px-3 py-2 hover:bg-mist">
                 {n.label}
               </Link>

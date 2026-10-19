@@ -11,7 +11,9 @@ const NAV = [
   { href: "/faq", label: "FAQs" },
 ];
 
-export function WeddingHeader() {
+export function WeddingHeader({ blogLabel }: { blogLabel?: string }) {
+  // the Journal joins the menu once a post is published
+  const nav = blogLabel ? [...NAV, { href: "/blog", label: blogLabel }] : NAV;
   return (
     <header className="sticky top-0 z-30 border-b border-wine/10 bg-sand/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2.5">
@@ -19,7 +21,7 @@ export function WeddingHeader() {
           <Image src="/img/wedding/logo.png" alt="Thoroughly Modern Minnie, wedding celebrant" width={64} height={64} className="h-14 w-14 object-contain" priority />
         </Link>
         <nav className="hidden flex-1 justify-center gap-7 font-script text-lg text-wine md:flex">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <Link key={n.href} href={n.href} className="hover:underline">
               {n.label}
             </Link>
@@ -32,7 +34,7 @@ export function WeddingHeader() {
         <details className="relative ml-auto md:hidden">
           <summary className="cursor-pointer list-none rounded-full bg-blush px-4 py-1.5 font-script text-lg text-wine">Menu</summary>
           <nav className="absolute right-0 mt-2 flex w-48 flex-col rounded-lg border border-wine/10 bg-white p-2 font-script text-lg text-wine shadow-lg">
-            {[...NAV, { href: "/enquire", label: "Enquire" }].map((n) => (
+            {[...nav, { href: "/enquire", label: "Enquire" }].map((n) => (
               <Link key={n.href} href={n.href} className="rounded px-3 py-1.5 hover:bg-sand">
                 {n.label}
               </Link>
