@@ -36,7 +36,6 @@ export function FreeResourceForm({ button, thanks, fileLabel }: { button: string
       <button disabled={pending} className="w-full rounded bg-coral px-6 py-2.5 font-semibold text-white hover:bg-royal disabled:opacity-60">
         {pending ? "Sending…" : <E k="resource.button">{button}</E>}
       </button>
-      <p className="text-sm text-slate">We&apos;ll only use your email to send this and the occasional update about workshops. Unsubscribe any time.</p>
     </form>
   );
 }

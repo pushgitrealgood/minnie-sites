@@ -37,15 +37,15 @@ const SITE_NAME = { wedding: "Wedding", rcc: "RCC" };
 
 /** Enquiries and booking requests from both sites, newest first, with a status and private notes. */
 export function Inbox({ items }: { items: Submission[] }) {
-  const [filter, setFilter] = useState<"open" | "all">("open");
-  const shown = items.filter((s) => filter === "all" || !["done", "archived"].includes(s.status));
+  const [filter, setFilter] = useState<"open" | "downloads" | "all">("open");
+  const shown = items.filter((s) => (filter === "all" ? true : filter === "downloads" ? s.kind === "download" : !["done", "archived"].includes(s.status)));
   if (!items.length) return <p className="rounded-lg border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">Nothing yet. New enquiries and booking requests will appear here (and in your email).</p>;
   return (
     <div className="space-y-3">
       <div className="flex gap-2 text-sm">
-        {(["open", "all"] as const).map((f) => (
+        {(["open", "downloads", "all"] as const).map((f) => (
           <button key={f} onClick={() => setFilter(f)} className={`rounded-full px-3 py-1 ${filter === f ? "bg-neutral-900 text-white" : "bg-white text-neutral-600 ring-1 ring-neutral-200"}`}>
-            {f === "open" ? "To do" : "All"}
+            {f === "open" ? "To do" : f === "downloads" ? `Free downloads (${items.filter((s) => s.kind === "download").length})` : "All"}
           </button>
         ))}
       </div>

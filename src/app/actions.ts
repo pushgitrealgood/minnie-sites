@@ -102,7 +102,7 @@ export async function submitDownload(_prev: DownloadState, formData: FormData): 
 
   const { error } = await adminClient()
     .from("submissions")
-    .insert({ site: "rcc", kind: "download", name: values.name, email: values.email.toLowerCase(), data: { ...values, resource: c["resource.title"] }, status: "done" });
+    .insert({ site: "rcc", kind: "download", name: values.name, email: values.email.toLowerCase(), data: { ...values, resource: c["resource.title"] } });
   if (error) return { ok: false, error: "Sorry, something went wrong. Please try again.", fields: values };
 
   await sendMail("rcc", {
