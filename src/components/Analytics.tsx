@@ -10,7 +10,7 @@ import type { Site } from "@/lib/sites";
  */
 const GA_ID: Record<Site, string | undefined> = {
   wedding: process.env.NEXT_PUBLIC_GA_ID_WEDDING || "G-YV6LWWXLRT",
-  rcc: process.env.NEXT_PUBLIC_GA_ID_RCC,
+  rcc: process.env.NEXT_PUBLIC_GA_ID_RCC || "G-4ZMZSW4RMN",
 };
 
 type Gtag = (...args: unknown[]) => void;
