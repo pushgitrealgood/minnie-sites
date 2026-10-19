@@ -2,8 +2,8 @@ import "server-only";
 import type { Site } from "@/lib/sites";
 
 /**
- * Sends email through Resend (https://resend.com) from each site's own domain, once RESEND_API_KEY is set and the
- * domains are verified there. Without a key it does nothing and returns false: submissions are still saved and shown
+ * Sends email through Resend (https://resend.com) from each site's own domain, once its key is set
+ * (RESEND_API_KEY_WEDDING / RESEND_API_KEY_RCC) and the domain is verified there. Without a key it does nothing and returns false: submissions are still saved and shown
  * on the /edit inbox, so nothing is lost while email is being set up.
  */
 const FROM: Record<Site, string> = {
@@ -12,7 +12,8 @@ const FROM: Record<Site, string> = {
 };
 
 export async function sendMail(site: Site, msg: { to: string; subject: string; html: string; replyTo?: string }) {
-  const key = process.env.RESEND_API_KEY;
+  // one Resend account per business (each free plan verifies one domain); RESEND_API_KEY covers both if only one is set
+  const key = (site === "wedding" ? process.env.RESEND_API_KEY_WEDDING : process.env.RESEND_API_KEY_RCC) || process.env.RESEND_API_KEY;
   if (!key) return false;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",

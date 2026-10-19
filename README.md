@@ -22,7 +22,7 @@ Open http://wedding.localhost:3000 and http://rcc.localhost:3000 (`*.localhost` 
 `.env.local` (not committed):
 
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-- `RESEND_API_KEY` – optional; without it form submissions are saved but not emailed
+- `RESEND_API_KEY_WEDDING`, `RESEND_API_KEY_RCC` – one Resend account per domain (free plan = one domain each); `RESEND_API_KEY` is used for both if set instead. Without a key, form submissions are saved but not emailed
 - `MAIL_COPY_TO` – optional; comma-separated addresses that also get every enquiry/booking email (testing)
 - `SITE_HOSTS` – optional extra hostnames for staging, e.g. `wedding=wedding-minnie.netlify.app,rcc=rcc-minnie.netlify.app`
 
