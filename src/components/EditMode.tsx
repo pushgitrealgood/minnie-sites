@@ -21,6 +21,7 @@ export function EditMode({ site }: { site: Site }) {
   const [changes, setChanges] = useState<Raw>({});
   const [box, setBox] = useState<{ key: string; value: string } | null>(null);
   const [list, setList] = useState<string | null>(null);
+  const [linkBox, setLinkBox] = useState<{ key: string; urlKey: string; text: string; url: string } | null>(null);
   const [status, setStatus] = useState<"" | "saving" | "saved" | "uploading" | string>("");
   const fileInput = useRef<HTMLInputElement>(null);
   const imageKey = useRef<string | null>(null);
@@ -72,7 +73,9 @@ export function EditMode({ site }: { site: Site }) {
       e.preventDefault();
       const k = el.dataset.k!;
       const kind = el.dataset.kKind;
-      if (kind === "rich") setBox({ key: k, value: String(changesRef.current[k] ?? raw[k] ?? "") });
+      const now = (key: string) => String(changesRef.current[key] ?? raw[key] ?? "");
+      if (kind === "rich") setBox({ key: k, value: now(k) });
+      else if (kind === "link") setLinkBox({ key: k, urlKey: el.dataset.kUrl!, text: now(k), url: now(el.dataset.kUrl!) });
       else if (kind === "image") {
         imageKey.current = k;
         fileInput.current?.click();
@@ -100,7 +103,7 @@ export function EditMode({ site }: { site: Site }) {
   // mark changed long text and lists until they're saved (their new look appears after saving)
   useEffect(() => {
     for (const el of document.querySelectorAll<HTMLElement>("[data-k]")) {
-      if (el.dataset.kKind === "rich" || el.dataset.kKind === "list") el.style.boxShadow = el.dataset.k! in changes ? "0 0 0 3px rgb(234 179 8 / 0.7)" : "";
+      if (el.dataset.kKind === "rich" || el.dataset.kKind === "list" || el.dataset.kKind === "link") el.style.boxShadow = el.dataset.k! in changes ? "0 0 0 3px rgb(234 179 8 / 0.7)" : "";
     }
   }, [changes]);
 
@@ -170,6 +173,37 @@ export function EditMode({ site }: { site: Site }) {
               onClick={() => {
                 change(box.key, (document.getElementById("edit-box") as HTMLTextAreaElement).value.trim());
                 setBox(null);
+              }}
+              className="rounded bg-blue-600 px-4 py-1.5 font-semibold text-white"
+            >
+              Done
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {linkBox && (
+        <Modal title="Edit link" onClose={() => setLinkBox(null)}>
+          <label className="block">
+            <span className="text-neutral-600">Words shown</span>
+            <input id="link-text" defaultValue={linkBox.text} autoFocus className="mt-1 w-full rounded border border-neutral-300 px-2 py-1.5" />
+          </label>
+          <label className="mt-3 block">
+            <span className="text-neutral-600">Web address it goes to</span>
+            <input id="link-url" defaultValue={linkBox.url} type="url" className="mt-1 w-full rounded border border-neutral-300 px-2 py-1.5" />
+          </label>
+          <div className="mt-3 flex justify-end gap-2">
+            <button onClick={() => setLinkBox(null)} className="rounded px-3 py-1.5 hover:bg-neutral-100">
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                const text = (document.getElementById("link-text") as HTMLInputElement).value.trim();
+                let url = (document.getElementById("link-url") as HTMLInputElement).value.trim();
+                if (url && !/^(https?:|mailto:|tel:)/i.test(url)) url = `https://${url}`;
+                if (text !== linkBox.text) change(linkBox.key, text);
+                if (url !== linkBox.url) change(linkBox.urlKey, url);
+                setLinkBox(null);
               }}
               className="rounded bg-blue-600 px-4 py-1.5 font-semibold text-white"
             >

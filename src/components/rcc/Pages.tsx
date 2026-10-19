@@ -11,9 +11,9 @@ const BTN = "inline-block rounded bg-coral px-6 py-2.5 font-semibold text-white 
 const BTN2 = "inline-block rounded border border-slate-300 bg-white px-6 py-2.5 font-semibold text-navy hover:border-navy";
 
 const PILLARS = [
-  { key: "resilience", title: "Resilience", href: "/resilience" },
-  { key: "confidence", title: "Confidence", href: "/confidence" },
-  { key: "critical", title: "Critical Thinking", href: "/critical-thinking" },
+  { key: "resilience", href: "/resilience" },
+  { key: "confidence", href: "/confidence" },
+  { key: "critical", href: "/critical-thinking" },
 ] as const;
 
 function WhyItMatters({ c }: { c: RccContent }) {
@@ -25,7 +25,7 @@ function WhyItMatters({ c }: { c: RccContent }) {
         </E>
         <ERich k="why.text" text={c["why.text"]} className="mt-5 text-lg text-slate" />
         <Link href="/workshops" className="mt-6 inline-block font-semibold text-royal hover:underline">
-          Read more about our approach →
+          <E k="why.link">{c["why.link"]}</E>
         </Link>
       </div>
     </section>
@@ -43,7 +43,7 @@ function Cta({ c }: { c: RccContent }) {
           <E k="cta.button">{c["cta.button"]}</E>
         </Link>
         <Link href="/workshops" className="inline-block rounded border border-white/60 px-6 py-2.5 font-semibold hover:bg-white hover:text-navy">
-          About the workshop
+          <E k="cta.button2">{c["cta.button2"]}</E>
         </Link>
       </div>
     </section>
@@ -89,10 +89,10 @@ export function RccHome({ c }: { c: RccContent }) {
         <ERich k="home.text" text={c["home.text"]} className="mx-auto mt-4 max-w-2xl text-lg text-slate" />
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Link href="/book" className={BTN}>
-            Book a workshop
+            <E k="home.button1">{c["home.button1"]}</E>
           </Link>
           <Link href="/workshops" className={BTN2}>
-            Learn more
+            <E k="home.button2">{c["home.button2"]}</E>
           </Link>
         </div>
         <EImg k="home.image" src={c["home.image"]} alt="Illustration of ideas, creativity and design around a light bulb" width={1200} height={741} sizes="(max-width: 800px) 100vw, 720px" className="mx-auto mt-10 w-full max-w-3xl rounded-lg" priority />
@@ -119,14 +119,16 @@ export function RccHome({ c }: { c: RccContent }) {
           <div className="mt-10 grid gap-6 text-left md:grid-cols-3">
             {PILLARS.map((p) => (
               <article key={p.key} className="overflow-hidden rounded-lg border border-slate-200">
-                <EImg k={`pillars.${p.key}.image`} src={c[`pillars.${p.key}.image`]} alt={`${p.title} illustration`} width={600} height={560} sizes="(max-width: 768px) 100vw, 370px" className="aspect-[4/3] w-full bg-white object-contain" />
+                <EImg k={`pillars.${p.key}.image`} src={c[`pillars.${p.key}.image`]} alt={`${c[`pillars.${p.key}.title`]} illustration`} width={600} height={560} sizes="(max-width: 768px) 100vw, 370px" className="aspect-[4/3] w-full bg-white object-contain" />
                 <div className="p-5">
-                  <h3 className="font-display text-xl font-bold">{p.title}</h3>
+                  <E k={`pillars.${p.key}.title`} as="h3" className="block font-display text-xl font-bold">
+                    {c[`pillars.${p.key}.title`]}
+                  </E>
                   <E k={`pillars.${p.key}.text`} as="p" className="mt-1 block text-slate">
                     {c[`pillars.${p.key}.text`]}
                   </E>
                   <Link href={p.href} className="mt-3 inline-block font-semibold text-royal hover:underline">
-                    Learn more →
+                    <E k="pillars.more">{c["pillars.more"]}</E>
                   </Link>
                 </div>
               </article>
@@ -176,7 +178,7 @@ export function RccHome({ c }: { c: RccContent }) {
             </E>
             <ERich k="booking.text" text={c["booking.text"]} className="mt-5 text-lg text-slate" />
             <Link href="/book" className={`${BTN} mt-6`}>
-              Book a workshop
+              <E k="booking.button">{c["booking.button"]}</E>
             </Link>
           </div>
           <EImg k="booking.image" src={c["booking.image"]} alt="Advantages of developing critical thinking skills" width={490} height={575} sizes="(max-width: 768px) 100vw, 480px" className="mx-auto w-full max-w-md rounded-lg" />
@@ -205,7 +207,9 @@ export function RccWorkshops({ c }: { c: RccContent }) {
     <>
       <PageHead c={c} k="workshops.title" lead="workshops.lead" />
       <article className="mx-auto max-w-3xl px-4 py-14 text-lg text-slate">
-        <h2 className="font-display text-3xl font-bold text-navy">What&apos;s included</h2>
+        <E k="workshops.includedTitle" as="h2" className="block font-display text-3xl font-bold text-navy">
+          {c["workshops.includedTitle"]}
+        </E>
         <ERich k="workshops.included" text={c["workshops.included"]} className="mt-4" />
         <EImg k="workshops.image" src={c["workshops.image"]} alt="RCC Workshops" width={520} height={186} sizes="(max-width: 768px) 100vw, 720px" className="my-10 w-full rounded" />
         <ERich k="workshops.overview" text={c["workshops.overview"]} />
@@ -219,12 +223,14 @@ export function RccWorkshops({ c }: { c: RccContent }) {
               <h3 className="text-lg font-semibold text-navy">{a.title}</h3>
               <p className="mt-2">{a.how}</p>
               <p className="mt-2">
-                <strong className="text-navy">Why?</strong> {a.why}
+                <strong className="text-navy">{c["workshops.why"]}</strong> {a.why}
               </p>
             </div>
           ))}
         </div>
-        <h3 className="mt-10 text-xl font-semibold text-navy">More activities</h3>
+        <E k="workshops.moreTitle" as="h3" className="mt-10 block text-xl font-semibold text-navy">
+          {c["workshops.moreTitle"]}
+        </E>
         <ERich k="workshops.more" text={c["workshops.more"]} className="mt-3 text-base" />
       </article>
       <Cta c={c} />
@@ -264,7 +270,7 @@ export function RccAbout({ c }: { c: RccContent }) {
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           {PILLARS.map((p) => (
             <Link key={p.key} href={p.href} className="rounded-lg border border-slate-200 p-5 hover:border-navy">
-              <h2 className="font-display text-xl font-bold">{p.title}</h2>
+              <h2 className="font-display text-xl font-bold">{c[`pillars.${p.key}.title`]}</h2>
               <p className="mt-1 text-slate">{c[`pillars.${p.key}.text`]}</p>
             </Link>
           ))}
@@ -282,9 +288,9 @@ export function RccBook({ c }: { c: RccContent }) {
       <section className="mx-auto max-w-3xl px-4 py-12">
         <BookingForm thanks={c["book.thanks"]} />
         <p className="mt-6 text-center text-slate">
-          Questions first? Email{" "}
+          <E k="book.questions">{c["book.questions"]}</E>{" "}
           <a href={`mailto:${c["contact.email"]}`} className="text-royal underline">
-            {c["contact.email"]}
+            <E k="contact.email">{c["contact.email"]}</E>
           </a>
         </p>
       </section>

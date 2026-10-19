@@ -8,6 +8,7 @@ export type Activity = { title: string; how: string; why: string };
 
 const whyItMatters = {
   "why.title": "Why It Matters",
+  "why.link": "Read more about our approach →",
   "why.text":
     "Childhood isn’t always carefree. From school pressures to social challenges, kids today face real stress. Our workshops provide tools to:\n\n- Cope with anxiety and uncertainty\n- Learn from setbacks and “fail well”\n- Shift from “I can’t” to “How can I?”\n- Understand the energy they project into the world\n\nResilience, confidence, and critical thinking are life skills — and they can be taught.",
 };
@@ -18,9 +19,14 @@ export const rccDefaults = {
     "Drama-based workshops for KS2 and KS3 pupils building resilience, confidence and critical thinking. Delivered on-site at schools across the UK and Northern Ireland.",
 
   "contact.email": "rccworkshopsuk@gmail.com",
+  "footer.copyright": "© RCC Workshops",
+  "footer.legal": "Privacy & terms",
+  "footer.book": "Book a workshop",
 
   "home.title": "Welcome to RCC Workshops",
   "home.text": "Empowering KS2 & KS3 pupils to thrive in today’s world through resilience, confidence, and critical thinking.",
+  "home.button1": "Book a workshop",
+  "home.button2": "Learn more",
   "home.image": "/img/rcc/unnamed_4.png",
   "home.trusted": "As trusted by",
   "home.trustedLogo": "/img/rcc/gca_logo.jpg",
@@ -28,6 +34,10 @@ export const rccDefaults = {
   "pillars.eyebrow": "About the workshop",
   "pillars.title": "The Power of a Positive Mindset",
   "pillars.text": "Our workshops help students:",
+  "pillars.resilience.title": "Resilience",
+  "pillars.confidence.title": "Confidence",
+  "pillars.critical.title": "Critical Thinking",
+  "pillars.more": "Learn more →",
   "pillars.resilience.text": "Develop resilience through real-life strategies",
   "pillars.resilience.image": "/img/rcc/unnamed_1.png",
   "pillars.confidence.text": "Build confidence in social and academic settings",
@@ -56,6 +66,7 @@ export const rccDefaults = {
   "booking.text":
     "We deliver workshops on-site at your school. Available across the UK and Northern Ireland (travel fees may apply).\n\nHow to book:\n\n- Fill out our quick enquiry form\n- We’ll customise a session to your school's needs\n- Confirm your date and we’ll take care of the rest",
   "booking.image": "/img/rcc/unnamed_5.png",
+  "booking.button": "Book a workshop",
 
   "testimonials.eyebrow": "Testimonials",
   "testimonials.title": "What people are saying",
@@ -84,6 +95,7 @@ export const rccDefaults = {
 
   "cta.title": "Enquire about a workshop today",
   "cta.button": "Book now",
+  "cta.button2": "About the workshop",
 
   // Workshops page
   "workshops.seoTitle": "The Workshop: Resilience, Confidence & Critical Thinking | RCC Workshops",
@@ -97,6 +109,9 @@ export const rccDefaults = {
   "workshops.drama":
     "## Drama activities support children in many ways\n\n- **Emotional Expression & Regulation:** Allows kids to safely explore and express emotions. They learn to manage anxiety, disappointment, or frustration in character.\n- **Problem-Solving & Adaptability:** Improv and storytelling help kids think on their feet and adapt when things don’t go as planned. This builds mental flexibility.\n- **Confidence & Self-Efficacy:** Performing in front of others fosters self-confidence. Success teaches that effort leads to improvement.\n- **Empathy & Perspective-Taking:** Playing different characters helps kids understand diverse perspectives, making them emotionally intelligent and socially resilient.\n- **Community & Support:** Working in a group builds social connections and a sense of belonging, which is key to emotional resilience.",
   "workshops.activitiesTitle": "Sample activities",
+  "workshops.includedTitle": "What’s included",
+  "workshops.why": "Why?",
+  "workshops.moreTitle": "More activities",
   activities: [
     { title: "🎭 Mirror Game", how: "In pairs, one child is the \"leader\" and the other mirrors them.", why: "Encourages focus, creativity, and trust. Taking turns as the leader fosters a sense of agency." },
     { title: "🗣️ 1 Minute Speeches", how: "Draw a random topic (e.g. “my dream pet,” “if I ruled the world”) and speak about it for 1 minute.", why: "Develops public speaking skills and quick thinking in a low-stakes, playful way." },
@@ -139,6 +154,7 @@ export const rccDefaults = {
 
   "book.seoTitle": "Book a Workshop | RCC Workshops",
   "book.title": "Make a Booking",
+  "book.questions": "Questions first? Email",
   "book.text":
     "Tell us about your school and pupils, and we’ll be in touch to confirm availability and tailor the session to your needs. Workshops are delivered on-site across the UK and Northern Ireland.",
   "book.thanks": "Thank you! We’ve received your booking request and will be in touch shortly to confirm the details.",

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { WeddingContent } from "@/lib/content/wedding";
-import { E, EImg, ERich } from "@/components/Editable";
+import { E, EImg, ELink, ERich } from "@/components/Editable";
 import { Rich } from "@/components/Rich";
 import { Carousel } from "@/components/Carousel";
 import { EnquiryForm } from "./EnquiryForm";
@@ -42,19 +42,19 @@ export function WeddingHome({ c }: { c: WeddingContent }) {
               <ERich k="intro.text" text={c["intro.text"]} />
               <p className="mt-5">
                 <a href={`tel:${c["contact.phone"].replace(/\s/g, "")}`} className="hover:underline">
-                  {c["contact.phone"]}
+                  <E k="contact.phone">{c["contact.phone"]}</E>
                 </a>
                 <br />
                 <a href={`mailto:${c["contact.email"]}`} className="break-all hover:underline">
-                  {c["contact.email"]}
+                  <E k="contact.email">{c["contact.email"]}</E>
                 </a>
               </p>
               <p className="mt-5 text-mauve">
                 <E k="intro.accreditation">{c["intro.accreditation"]}</E>
                 {" · "}
-                <a href="https://www.acorn2oakceremonies.co.uk/celebrant-training-school" target="_blank" rel="noopener" className="underline">
-                  acorn2oakceremonies.co.uk
-                </a>
+                <ELink k="intro.accreditationLink" urlKey="intro.accreditationUrl" href={c["intro.accreditationUrl"]} className="underline">
+                  {c["intro.accreditationLink"]}
+                </ELink>
               </p>
               <Link href="/enquire" className="mt-7 inline-block rounded bg-rose px-7 py-2.5 text-white hover:bg-wine">
                 <E k="intro.cta">{c["intro.cta"]}</E>
@@ -116,10 +116,14 @@ export function WeddingHome({ c }: { c: WeddingContent }) {
       </section>
 
       <section className="bg-wine px-4 py-14 text-center text-white">
-        <h2 className="text-3xl">So let’s chat</h2>
-        <p className="mx-auto mt-2 max-w-xl text-lg text-white/85">Whether you’re ready to book or just exploring options, I’d love to hear from you.</p>
+        <E k="chat.title" as="h2" className="block text-3xl">
+          {c["chat.title"]}
+        </E>
+        <E k="chat.text" as="p" className="mx-auto mt-2 block max-w-xl text-lg text-white/85">
+          {c["chat.text"]}
+        </E>
         <Link href="/enquire" className="mt-6 inline-block rounded bg-blush px-7 py-2.5 text-wine hover:bg-white">
-          Enquire today
+          <E k="chat.cta">{c["chat.cta"]}</E>
         </Link>
       </section>
     </>
@@ -147,7 +151,7 @@ export function WeddingFaq({ c }: { c: WeddingContent }) {
         </div>
         <p className="mt-10 text-center">
           <Link href="/enquire" className="inline-block rounded bg-rose px-7 py-2.5 text-white hover:bg-wine">
-            Ask me anything
+            <E k="faq.cta">{c["faq.cta"]}</E>
           </Link>
         </p>
       </div>
@@ -178,11 +182,11 @@ export function WeddingEnquire({ c }: { c: WeddingContent }) {
         <p className="mt-8 text-center text-mauve">
           Or call{" "}
           <a href={`tel:${c["contact.phone"].replace(/\s/g, "")}`} className="underline">
-            {c["contact.phone"]}
+            <E k="contact.phone">{c["contact.phone"]}</E>
           </a>{" "}
           · email{" "}
           <a href={`mailto:${c["contact.email"]}`} className="break-all underline">
-            {c["contact.email"]}
+            <E k="contact.email">{c["contact.email"]}</E>
           </a>
         </p>
       </div>

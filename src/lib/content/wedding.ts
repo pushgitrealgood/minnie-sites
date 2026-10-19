@@ -24,6 +24,8 @@ export const weddingDefaults = {
   "intro.image": "/img/wedding/minnie.jpg",
   "intro.accreditation": "Accredited by Acorn2Oak Ceremonies Celebrant Training",
   "intro.cta": "Enquire today",
+  "intro.accreditationLink": "acorn2oakceremonies.co.uk",
+  "intro.accreditationUrl": "https://www.acorn2oakceremonies.co.uk/celebrant-training-school",
 
   "contact.phone": "07815 835558",
   "contact.email": "modernminnieweddings@gmail.com",
@@ -66,8 +68,13 @@ export const weddingDefaults = {
     },
   ] as Testimonial[],
 
+  "chat.title": "So let’s chat",
+  "chat.text": "Whether you’re ready to book or just exploring options, I’d love to hear from you.",
+  "chat.cta": "Enquire today",
+
   "faq.title": "Frequently Asked Questions",
   "faq.intro": "Everything couples usually ask before booking. Can’t see your question? Just get in touch.",
+  "faq.cta": "Ask me anything",
   faqs: [
     {
       q: "Are you authorised to marry us?",

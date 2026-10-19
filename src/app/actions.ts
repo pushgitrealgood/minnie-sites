@@ -66,11 +66,17 @@ export async function submitForm(site: Site, _prev: FormState, formData: FormDat
     .filter(([k]) => values[k])
     .map(([k, label]) => `<tr><td style="padding:4px 12px 4px 0;color:#666;vertical-align:top">${escapeHtml(label)}</td><td style="padding:4px 0">${escapeHtml(values[k]).replace(/\n/g, "<br>")}</td></tr>`)
     .join("");
-  await sendMail(site, {
-    to: c["contact.email"],
-    replyTo: values.email,
-    subject: site === "wedding" ? `New enquiry from ${values.name}` : `Booking request: ${values.school}`,
-    html: `<p>${site === "wedding" ? "A new enquiry from your website." : "A new workshop booking request from your website."} Reply to this email to answer them directly.</p><table>${rows}</table>`,
-  }).catch(() => false);
+  // to Minnie, plus a separate copy to anyone in MAIL_COPY_TO (comma-separated, set in Netlify; used for testing)
+  const copies = (process.env.MAIL_COPY_TO ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+  await Promise.all(
+    [c["contact.email"], ...copies].map((to) =>
+      sendMail(site, {
+        to,
+        replyTo: values.email,
+        subject: site === "wedding" ? `New enquiry from ${values.name}` : `Booking request: ${values.school}`,
+        html: `<p>${site === "wedding" ? "A new enquiry from your website." : "A new workshop booking request from your website."} Reply to this email to answer them directly.</p><table>${rows}</table>`,
+      }).catch(() => false),
+    ),
+  );
   return { ok: true };
 }

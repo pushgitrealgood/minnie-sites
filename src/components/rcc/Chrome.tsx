@@ -47,12 +47,12 @@ export function RccFooter({ c }: { c: RccContent }) {
   return (
     <footer className="border-t border-slate-200 bg-mist">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-8 text-sm text-slate">
-        <span>© RCC Workshops</span>
+        <E k="footer.copyright">{c["footer.copyright"]}</E>
         <Link href="/legal" className="hover:text-navy">
-          Privacy &amp; terms
+          <E k="footer.legal">{c["footer.legal"]}</E>
         </Link>
         <Link href="/book" className="hover:text-navy">
-          Book a workshop
+          <E k="footer.book">{c["footer.book"]}</E>
         </Link>
         <a href={`mailto:${c["contact.email"]}`} className="ml-auto hover:text-navy">
           <E k="contact.email">{c["contact.email"]}</E>

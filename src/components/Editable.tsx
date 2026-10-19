@@ -16,6 +16,15 @@ export function E({ k, as: Tag = "span", className, children }: { k: string; as?
   );
 }
 
+/** A link whose words and address can both be changed (edited in a small box). */
+export function ELink({ k, urlKey, href, className, children }: { k: string; urlKey: string; href: string; className?: string; children: ReactNode }) {
+  return (
+    <a data-k={k} data-k-kind="link" data-k-url={urlKey} href={href} target="_blank" rel="noopener" className={className}>
+      {children}
+    </a>
+  );
+}
+
 /** Longer text in the simple format (paragraphs, bullets…), edited in a box. */
 export function ERich({ k, text, className }: { k: string; text: string; className?: string }) {
   return (
