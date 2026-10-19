@@ -49,8 +49,9 @@ async function EditHome({ searchParams }: { searchParams: PageProps<"/edit">["se
 
       <section className="grid gap-4 sm:grid-cols-2">
         {(["wedding", "rcc"] as const).map((s) => {
-          const local = here === s;
-          const href = here === s ? "/" : `${SITE_INFO[s].url}/edit`;
+          // on a preview address (Netlify, localhost) both sites live here under /wedding and /rcc
+          const local = here === s || !here;
+          const href = here === s ? "/" : !here ? `/${s}` : `${SITE_INFO[s].url}/edit`;
           return (
             <a key={s} href={href} className="rounded-lg border border-neutral-200 bg-white p-5 hover:border-neutral-400">
               <h2 className="font-semibold">{SITE_INFO[s].name}</h2>
