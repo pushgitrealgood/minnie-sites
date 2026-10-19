@@ -5,10 +5,11 @@ import type { Site } from "@/lib/sites";
 
 /**
  * Google Analytics 4, only after the visitor accepts cookies (UK rules). Each site has its own GA4 property, set in
- * Netlify as NEXT_PUBLIC_GA_ID_WEDDING / NEXT_PUBLIC_GA_ID_RCC (e.g. G-XXXXXXX). Without an ID nothing shows.
+ * the code below (measurement IDs are public) or overridden in Netlify as NEXT_PUBLIC_GA_ID_WEDDING / NEXT_PUBLIC_GA_ID_RCC.
+ * Without an ID nothing shows.
  */
 const GA_ID: Record<Site, string | undefined> = {
-  wedding: process.env.NEXT_PUBLIC_GA_ID_WEDDING,
+  wedding: process.env.NEXT_PUBLIC_GA_ID_WEDDING || "G-YV6LWWXLRT",
   rcc: process.env.NEXT_PUBLIC_GA_ID_RCC,
 };
 
