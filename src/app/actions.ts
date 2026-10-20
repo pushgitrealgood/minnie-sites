@@ -1,7 +1,8 @@
 "use server";
 
 import { adminClient } from "@/lib/supabase/admin";
-import { escapeHtml, sendMail } from "@/lib/email";
+import { emailFooter, escapeHtml, sendMail } from "@/lib/email";
+import { SITE_INFO } from "@/lib/sites";
 import { getContent } from "@/lib/content/get";
 import type { Site } from "@/lib/sites";
 
@@ -62,22 +63,31 @@ export async function submitForm(site: Site, _prev: FormState, formData: FormDat
   if (error) return { ok: false, error: "Sorry, that didn't send. Please try again, or email directly.", fields: values };
 
   const c = await getContent(site);
+  const text = c as unknown as Record<string, string>;
+  const thanks = text[site === "wedding" ? "enquire.thanks" : "book.thanks"] ?? "";
   const rows = Object.entries(form.fields)
     .filter(([k]) => values[k])
     .map(([k, label]) => `<tr><td style="padding:4px 12px 4px 0;color:#666;vertical-align:top">${escapeHtml(label)}</td><td style="padding:4px 0">${escapeHtml(values[k]).replace(/\n/g, "<br>")}</td></tr>`)
     .join("");
   // to Minnie, plus a separate copy to anyone in MAIL_COPY_TO (comma-separated, set in Netlify; used for testing)
   const copies = (process.env.MAIL_COPY_TO ?? "").split(",").map((x) => x.trim()).filter(Boolean);
-  await Promise.all(
-    [c["contact.email"], ...copies].map((to) =>
+  await Promise.all([
+    ...[c["contact.email"], ...copies].map((to) =>
       sendMail(site, {
         to,
         replyTo: values.email,
         subject: site === "wedding" ? `New enquiry from ${values.name}` : `Booking request: ${values.school}`,
-        html: `<p>${site === "wedding" ? "A new enquiry from your website." : "A new workshop booking request from your website."} Reply to this email to answer them directly.</p><table>${rows}</table>`,
+        html: `<p>${site === "wedding" ? "A new enquiry from your website." : "A new workshop booking request from your website."} Reply to this email to answer them directly.</p><table>${rows}</table><p><a href="${SITE_INFO[site].url}/edit">See all enquiries and bookings</a></p>${emailFooter(site)}`,
       }).catch(() => false),
     ),
-  );
+    // a confirmation to the customer, from the site's domain; replies go to Minnie's contact email
+    sendMail(site, {
+      to: values.email,
+      replyTo: c["contact.email"],
+      subject: site === "wedding" ? "Thank you for your enquiry" : "Thank you for your booking request",
+      html: `<p>Hi ${escapeHtml(values.name)},</p><p>${escapeHtml(thanks)}</p><p>Here's a copy of what you sent:</p><table>${rows}</table><p>If anything needs changing, just reply to this email.</p>${emailFooter(site)}`,
+    }).catch(() => false),
+  ]);
   return { ok: true };
 }
 
@@ -109,7 +119,7 @@ export async function submitDownload(_prev: DownloadState, formData: FormData): 
     to: values.email,
     replyTo: c["contact.email"],
     subject: c["resource.title"],
-    html: `<p>Hi ${escapeHtml(values.name)},</p><p>Thanks for your interest. Here's your download: <a href="${escapeHtml(file)}">${escapeHtml(c["resource.fileLabel"])}</a></p><p>If you'd like to talk about a workshop for your school, just reply to this email.</p><p>RCC Workshops</p>`,
+    html: `<p>Hi ${escapeHtml(values.name)},</p><p>Thanks for your interest. Here's your download: <a href="${escapeHtml(file)}">${escapeHtml(c["resource.fileLabel"])}</a></p><p>If you'd like to talk about a workshop for your school, just reply to this email. You can also <a href="${SITE_INFO.rcc.url}/book">book a workshop online</a>.</p><p>RCC Workshops</p>${emailFooter("rcc")}`,
   }).catch(() => false);
   return { ok: true, file };
 }

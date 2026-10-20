@@ -1,5 +1,5 @@
 import "server-only";
-import type { Site } from "@/lib/sites";
+import { SITE_INFO, type Site } from "@/lib/sites";
 
 /**
  * Sends email through Resend (https://resend.com) from each site's own domain, once its key is set
@@ -25,4 +25,10 @@ export async function sendMail(site: Site, msg: { to: string; subject: string; h
 
 export function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]!);
+}
+
+/** Footer for every email: a link back to the site. (Replies are handled by the Reply-To header.) */
+export function emailFooter(site: Site) {
+  const { name, url } = SITE_INFO[site];
+  return `<hr style="border:0;border-top:1px solid #ddd;margin:24px 0 12px"><p style="margin:0;color:#555;font-size:13px">${escapeHtml(name)} · <a href="${url}" style="color:#555">${url.replace("https://", "")}</a></p>`;
 }
