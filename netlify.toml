@@ -7,6 +7,9 @@
   NODE_VERSION = "22"
   # public by design (they ship to the browser; the database is protected by row-level security)
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY"
+  # Next's build cache (Turbopack's compile cache) records env values; it's kept between builds but never served,
+  # so it isn't scanned. Everything that's deployed (pages, functions) still is.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**,.netlify/.next/cache/**"
 
 # make sure the Next.js runtime runs (without it Netlify serves the raw .next folder and every page 404s)
 [[plugins]]
