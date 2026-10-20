@@ -169,6 +169,11 @@ export const rccDefaults = {
   "caseStudies.nav": "Case studies",
   caseStudies: [] as CaseStudy[],
 
+  // automatic thank-you email to the school that sent a booking request (switched on/off and edited on /edit)
+  "email.thanksOn": true,
+  "email.thanksSubject": "Thank you for your booking request",
+  "email.thanksText": "Thank you for your booking request. We’ve received your details and will be in touch shortly to confirm dates and arrangements.",
+
   "blog.title": "Blog",
   "blog.intro": "Ideas, activities and research on building resilience, confidence and critical thinking in KS2 & KS3.",
   "blog.cta": "Bring a workshop to your school",

@@ -7,6 +7,8 @@ import { signOut } from "./actions";
 import { newPost } from "./posts/actions";
 import { postDate } from "@/lib/post-date";
 import { SetPassword, SignIn } from "./SignIn";
+import { ThanksEmail } from "./ThanksEmail";
+import { getContent } from "@/lib/content/get";
 import { Inbox, type Submission } from "./Inbox";
 
 export const metadata: Metadata = { title: "Edit your websites", robots: { index: false, follow: false } };
@@ -96,6 +98,19 @@ async function EditHome({ searchParams }: { searchParams: PageProps<"/edit">["se
               </ul>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-1 font-semibold">Automatic thank-you emails</h2>
+        <p className="mb-3 text-sm text-neutral-500">Sent to people who fill in the enquiry or booking form.</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {await Promise.all(
+            (["wedding", "rcc"] as const).map(async (s) => {
+              const c = await getContent(s);
+              return <ThanksEmail key={s} site={s} name={SITE_INFO[s].name} initial={{ on: c["email.thanksOn"], subject: c["email.thanksSubject"], text: c["email.thanksText"] }} />;
+            }),
+          )}
         </div>
       </section>
 

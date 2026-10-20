@@ -63,8 +63,11 @@ export async function submitForm(site: Site, _prev: FormState, formData: FormDat
   if (error) return { ok: false, error: "Sorry, that didn't send. Please try again, or email directly.", fields: values };
 
   const c = await getContent(site);
-  const text = c as unknown as Record<string, string>;
-  const thanks = text[site === "wedding" ? "enquire.thanks" : "book.thanks"] ?? "";
+  // the thank-you email's paragraphs (blank line = new paragraph)
+  const thanksHtml = c["email.thanksText"]
+    .split(/\n\s*\n/)
+    .map((p) => `<p>${escapeHtml(p.trim()).replace(/\n/g, "<br>")}</p>`)
+    .join("");
   const rows = Object.entries(form.fields)
     .filter(([k]) => values[k])
     .map(([k, label]) => `<tr><td style="padding:4px 12px 4px 0;color:#666;vertical-align:top">${escapeHtml(label)}</td><td style="padding:4px 0">${escapeHtml(values[k]).replace(/\n/g, "<br>")}</td></tr>`)
@@ -80,12 +83,13 @@ export async function submitForm(site: Site, _prev: FormState, formData: FormDat
         html: `<p>${site === "wedding" ? "A new enquiry from your website." : "A new workshop booking request from your website."} Reply to this email to answer them directly.</p><table>${rows}</table><p><a href="${SITE_INFO[site].url}/edit">See all enquiries and bookings</a></p>${emailFooter(site)}`,
       }).catch(() => false),
     ),
-    // a confirmation to the customer, from the site's domain; replies go to Minnie's contact email
-    sendMail(site, {
+    // the thank-you to the customer (if switched on in /edit), from the site's domain; replies go to Minnie's contact email
+    c["email.thanksOn"] &&
+      sendMail(site, {
       to: values.email,
       replyTo: c["contact.email"],
-      subject: site === "wedding" ? "Thank you for your enquiry" : "Thank you for your booking request",
-      html: `<p>Hi ${escapeHtml(values.name)},</p><p>${escapeHtml(thanks)}</p><p>Here's a copy of what you sent:</p><table>${rows}</table><p>If anything needs changing, just reply to this email.</p>${emailFooter(site)}`,
+      subject: c["email.thanksSubject"],
+      html: `<p>Hi ${escapeHtml(values.name)},</p>${thanksHtml}<p>Here's a copy of what you sent:</p><table>${rows}</table><p>If anything needs changing, just reply to this email.</p>${emailFooter(site)}`,
     }).catch(() => false),
   ]);
   return { ok: true };

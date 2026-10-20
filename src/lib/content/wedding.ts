@@ -124,6 +124,11 @@ export const weddingDefaults = {
     "Tell me a little about your plans and I’ll be in touch to arrange an initial chat. There’s no obligation, whether you’re ready to book or just exploring options.",
   "enquire.thanks": "Thank you! Your message is on its way to me, and I’ll be in touch very soon.",
 
+  // automatic thank-you email to the person who sent an enquiry (switched on/off and edited on /edit)
+  "email.thanksOn": true,
+  "email.thanksSubject": "Thank you for your enquiry",
+  "email.thanksText": "Thank you for getting in touch! I’ve received your enquiry and I’ll be in touch very soon to talk about your ceremony.",
+
   "footer.copyright": "© 2026 Thoroughly Modern Minnie. All rights reserved.",
 };
 
